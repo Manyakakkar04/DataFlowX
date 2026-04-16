@@ -18,34 +18,24 @@ public class ConsumerServiceImpl implements ConsumerService {
             groupId = "bulk-group"
     )
     @Override
-    public void processData(String message) {
+    public void processData(UserDto userDto) {
         try {
-            if (message == null || message.trim().isEmpty()) {
+            if (userDto == null || userDto.getEmailId() == null) {
                 return;
             }
-            String[] parts = message.split(",");
-            if (parts.length < 3) {
-                return;
-            }
-            UserDto user = new UserDto();
-            user.setName(parts[0].trim());
-            user.setEmailId(parts[1].trim());
-
-            String mobileStr = parts[2].trim();
-            try {
-                user.setMobile(Long.parseLong(mobileStr));
-            } catch (NumberFormatException e) {
+            if (userRepository.existsByEmailId(userDto.getEmailId())) {
                 return;
             }
 
-            User newUser = new User();
-            newUser.setName(user.getName());
-            newUser.setEmailId(user.getEmailId());
-            newUser.setMobile(user.getMobile());
 
-            userRepository.save(newUser);
+            User user = new User();
+            user.setName(userDto.getName());
+            user.setEmailId(userDto.getEmailId());
+            user.setMobile(userDto.getMobile());
+
+            userRepository.save(user);
         } catch (Exception e) {
-            System.err.println("Failed to process message: " + message + "Error: " + e.getMessage());
+            System.err.println("Failed to process user: " + userDto + "Error: " + e.getMessage());
         }
     }
 }

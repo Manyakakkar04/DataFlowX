@@ -1,5 +1,6 @@
 package com.manyakakkar.DataFlowX.service.impl;
 
+import com.manyakakkar.DataFlowX.dto.UserDto;
 import com.manyakakkar.DataFlowX.service.ProducerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -13,7 +14,7 @@ import java.io.InputStreamReader;
 @Service
 public class ProducerServiceImpl implements ProducerService {
 
-    private final KafkaTemplate<String, String> kafkaTemplate;
+    private final KafkaTemplate<String, UserDto> kafkaTemplate;
 
     private static final String TOPIC = "bulk-upload-topic";
 
@@ -38,8 +39,23 @@ public class ProducerServiceImpl implements ProducerService {
                     continue;
                 }
 
+                String[] parts = line.split(",");
 
-                kafkaTemplate.send(TOPIC, line);
+                if (parts.length < 3) {
+                    continue;
+                }
+
+                // ✅ CREATE DTO PER ROW
+                UserDto userDto = new UserDto();
+                userDto.setName(parts[0].trim());
+                userDto.setEmailId(parts[1].trim());
+                try {
+                    userDto.setMobile(Long.parseLong(parts[2].trim()));
+                } catch (NumberFormatException e) {
+                    continue;
+                }
+
+                kafkaTemplate.send(TOPIC, userDto);
 
                 count++;
             }
