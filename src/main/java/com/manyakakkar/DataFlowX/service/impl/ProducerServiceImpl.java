@@ -10,12 +10,15 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 @Service
-@RequiredArgsConstructor
 public class ProducerServiceImpl implements ProducerService {
 
     private final KafkaTemplate<String, String> kafkaTemplate;
 
     private static final String TOPIC = "bulk-upload-topic";
+
+    public ProducerServiceImpl(KafkaTemplate<String, String> kafkaTemplate) {
+        this.kafkaTemplate = kafkaTemplate;
+    }
 
     @Override
     public String publishToKafka(MultipartFile file) {
