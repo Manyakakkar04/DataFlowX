@@ -1,5 +1,6 @@
 package com.manyakakkar.DataFlowX.service.impl;
 
+import com.manyakakkar.DataFlowX.dto.UserDto;
 import com.manyakakkar.DataFlowX.entity.User;
 import com.manyakakkar.DataFlowX.repository.UserRepository;
 import com.manyakakkar.DataFlowX.service.ConsumerService;
@@ -19,18 +20,32 @@ public class ConsumerServiceImpl implements ConsumerService {
     @Override
     public void processData(String message) {
         try {
-            String[] parts = message.split(",");
-            if (parts.length < 3) {
-                System.err.println("Skipping malformed row: " + message);
+            if (message == null || message.trim().isEmpty()) {
                 return;
             }
-            User user = new User();
+            String[] parts = message.split(",");
+            if (parts.length < 3) {
+                return;
+            }
+            UserDto user = new UserDto();
             user.setName(parts[0].trim());
             user.setEmailId(parts[1].trim());
-            user.setMobile(Long.valueOf(parts[2].trim()));
-            userRepository.save(user);
+
+            String mobileStr = parts[2].trim();
+            try {
+                user.setMobile(Long.parseLong(mobileStr));
+            } catch (NumberFormatException e) {
+                return;
+            }
+
+            User newUser = new User();
+            newUser.setName(user.getName());
+            newUser.setEmailId(user.getEmailId());
+            newUser.setMobile(user.getMobile());
+
+            userRepository.save(newUser);
         } catch (Exception e) {
-            System.err.println("Failed to process message: " + message + " | Error: " + e.getMessage());
+            System.err.println("Failed to process message: " + message + "Error: " + e.getMessage());
         }
     }
 }

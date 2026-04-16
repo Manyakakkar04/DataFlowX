@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
+@RequiredArgsConstructor
 @Service
 public class ProducerServiceImpl implements ProducerService {
 
@@ -16,9 +17,9 @@ public class ProducerServiceImpl implements ProducerService {
 
     private static final String TOPIC = "bulk-upload-topic";
 
-    public ProducerServiceImpl(KafkaTemplate<String, String> kafkaTemplate) {
-        this.kafkaTemplate = kafkaTemplate;
-    }
+//    public ProducerServiceImpl(KafkaTemplate<String, String> kafkaTemplate) {
+//        this.kafkaTemplate = kafkaTemplate;
+//    }
 
     @Override
     public String publishToKafka(MultipartFile file) {
