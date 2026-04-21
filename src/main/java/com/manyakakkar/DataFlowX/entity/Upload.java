@@ -7,15 +7,14 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "users")
-public class User {
-
+@Table(name = "Uploads")
+public class Upload {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long uploadId;
+    private Long userId;
+    String fileName;
+    String status;
 
-    private String name;
-    @Column(unique = true)
-    private String emailId;
-    private Long mobile;
+
 }
