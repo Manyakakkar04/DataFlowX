@@ -9,6 +9,19 @@ A high-performance, distributed, event-driven data pipeline built with **Apache 
 DataFlowX is a backend system designed for large-scale data ingestion. It leverages Kafka's distributed messaging to fan out workloads across parallel consumers, persists processed data to PostgreSQL, and uses Redis for fast caching. Secure REST APIs with JWT-based authentication control access to the pipeline.
 
 ---
+# 📌 Features
+
+- 📁 Upload large CSV files
+- ⚡ Batch processing using Kafka
+- 🔄 Asynchronous processing with consumers
+- 📊 Row-level status tracking (SUCCESS / FAILED)
+- 🚦 Rate limiting using Redis (1 upload / 5 minutes)
+- 🧠 DTO mapping using column names
+- 📉 Validation pipeline for each row
+- 🔐 Planned JWT-based authentication
+- 📄 Status file generation for processed results
+
+---
 
 ## 🏗️ Architecture
 
@@ -159,6 +172,8 @@ DataFlowX/
 └── README.md
 ```
 
+## Author
+Manya Kakkar
 
 
 ---
